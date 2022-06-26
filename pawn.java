@@ -1,6 +1,6 @@
 package defaultpackage;
-import Piece
-public class Pawn {
+
+public class Piece {
 	
 	public abstract class Piece{
 	    protected int x, y;
