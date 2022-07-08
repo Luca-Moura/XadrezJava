@@ -1,5 +1,9 @@
 package program;
 
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
 public class Movement {
 
 	/**
@@ -18,18 +22,19 @@ public class Movement {
 		char color = piece.charAt(0); // Pega a cor dela
 		char type = piece.charAt(1); // Pega o tipo da peca
 		int colorNum = 404; // Cor dela em numero: 0-White , 1-Black e 404-Erro
-		int difRow =Math.abs(endRow - startRow); // Quantos quadrados andados na linha
-		int difCol =Math.abs(endCol - startCol); // Quantos quadrados andados na coluna
+		int difRow = Math.abs(endRow - startRow); // Quantos quadrados andados na linha
+		int difCol = Math.abs(endCol - startCol); // Quantos quadrados andados na coluna
+		boolean isPromo = false; // Essa peca vai realizar promocao
 
-		int answer = 1; //Jogador ainda tem turno, 1 é sim , 2 é não
+		int answer = 1; // Jogador ainda tem turno, 1 é sim , 2 é não
 
 		// Impede jogador de pegar peca do adversario
 		if (color == 'W') {
 			colorNum = 0;
-			answer =1;
+			answer = 1;
 		} else if (color == 'B') {
 			colorNum = 1;
-			answer =1;
+			answer = 1;
 		}
 		boolean notPiece = false;
 		if (colorNum != colour) {
@@ -47,15 +52,16 @@ public class Movement {
 		// Impede Torre, Bispo e Rainha de pular outras pecas
 		if (pieceMovLegal == 2) { // Impede passar por cima -horizontal ou vertical Torre/Rainha
 			if (difRow > 0) { // Movimento em linhas
+
 				if (endRow > startRow) { // Se peca indo do topo para baixo
 					int sum = 0;
-					for (int i = 0; i < difRow; i++) {
+					for (int i = 1; i < difRow; i++) {
 						startRow += 1;
 						String frontSpot = mat[startRow][startCol];
 						if (frontSpot != null) {
-							if (frontSpot == " - "){
-							}else{
-							sum += 1;
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
 							}
 						}
 					}
@@ -66,12 +72,15 @@ public class Movement {
 					}
 				} else if (startRow > endRow) { // Se peca indo de baixo para cima
 					int sum = 0;
-					for (int i = 0; i < startRow; i++) {
+					for (int i = 1; i < difRow; i++) {
+						startRow -= 1;
 						String frontSpot = mat[startRow][startCol];
 						if (frontSpot != null) {
-							sum += 1;
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
 						}
-						endRow += 1;
 					}
 					if (sum == 0) {
 						pieceMovLegal = 0;
@@ -81,11 +90,133 @@ public class Movement {
 				}
 
 			} else if (difCol > 0) { // Movimento em colunas
-
+				if (endCol > startCol) { // Se peca indo esquerda para direita
+					int sum = 0;
+					for (int i = 1; i < difCol; i++) {
+						startCol += 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				} else if (startCol > endCol) { // Se peca indo esquerda para direita
+					int sum = 0;
+					for (int i = 1; i < difCol; i++) {
+						startCol -= 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				}
 			}
 		}
 		if (pieceMovLegal == 3) { // Impede passar por cima -diagonal Bispo/Rainha
-			// to do
+
+			if (difRow > 0) { // Diagonal parte superior do campo
+
+				if (difCol > 0) { // Diagonal +/+
+					int sum = 0;
+					for (int i = 1; i < difRow; i++) {
+						startRow += 1;
+						startCol += 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				} else if (difCol < 0) { // Diagonal +/-
+					int sum = 0;
+					for (int i = 1; i < difRow; i++) {
+						startRow += 1;
+						startCol -= 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				}
+
+			}
+			if (difRow < 0) { // Diagonal parte inferior do campo
+				if (difCol > 0) { // Diagonal -/+
+					int sum = 0;
+					for (int i = 1; i < difRow; i++) {
+						startRow -= 1;
+						startCol += 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				} else if (difCol < 0) { // Diagonal -/-
+					int sum = 0;
+					for (int i = 1; i < difRow; i++) {
+						startRow -= 1;
+						startCol -= 1;
+						String frontSpot = mat[startRow][startCol];
+						if (frontSpot != null) {
+							if (frontSpot == " - ") {
+							} else {
+								sum += 1;
+							}
+						}
+					}
+					if (sum == 0) {
+						pieceMovLegal = 0;
+					} else {
+						pieceMovLegal = 1;
+					}
+				}
+			}
+		}
+
+		// Promocao do peao
+		if (pieceMovLegal == 4 && isPromo == false)
+
+		{
+			pieceMovLegal = 0; // Deixa fazer o movimento normal
+			isPromo = true; // Vai realizar promo
 		}
 
 		// Impede fogo amigo
@@ -108,28 +239,51 @@ public class Movement {
 
 			// Erro de nao ter lido cores
 			if ((ffColorNum == 404) || (colorNum == 404)) {
-				System.out.println("Erro Movement.");
+				System.out.println("Erro Cor.");
 			}
 		}
 
 		// Movimento em si
-		System.out.println(colorNum +"/cNum/ "+  pieceMovLegal +"/pMovLeg/ "+ notPiece +"/notP");
 		if ((colorNum == colour) && (pieceMovLegal == 0) && (notPiece == false)) {
 			// Peca movimentada
 			mat[endRow][endCol] = mat[startRow][startCol];
 			mat[startRow][startCol] = " - ";
+			enPassant(colorNum, mat, endRow, endCol, type); // Confere se En Passant
+			answer = 0; // Envia que o movimento foi feito
+		}
 
-			// Envia que o movimento foi feito
-			if (colour == 0) {
-				answer = 0;
-			} else if (colour == 1) {
-				answer = 0;
+		// Movimento em si - Versão com promocao
+		if ((colorNum == colour) && (pieceMovLegal == 0) && (notPiece == true))
+
+		{
+			// Peca movimentada
+			mat[endRow][endCol] = mat[startRow][startCol];
+			mat[startRow][startCol] = " - ";
+
+			Board board = new Board();
+			List<String> promo = board.promo(colorNum);
+			Scanner scanner = new Scanner(System.in);
+			String promoSelect = "Vazio";
+			try {
+				System.out.println("Escolha a peca desejada para promocao: " + promo);
+				promoSelect = scanner.next();
+			} catch (ArrayIndexOutOfBoundsException e) {
+				System.out.println("Posicao Invalida: Tente de novo.");
+			} catch (InputMismatchException e) {
+				System.out.println("Algo foi digitado errado.");
 			}
+			scanner.close();
+			if (promoSelect != "Vazio") {
+				p.promotionPiece(promoSelect, endRow, endCol, colorNum, mat);
+				enPassant(colorNum, mat, endRow, endCol, type); // Confere se En Passant
+				answer = 0; // Envia que o movimento foi feito
+			}
+
 		}
 
 		return answer;
 	}
-	
+
 	// Linha ficticia(1~8) para resposta em linha da matriz(0~7)
 	public int FixMovRow(int row) {
 		if (row == 8) {
@@ -176,4 +330,51 @@ public class Movement {
 		}
 	}
 
+	public void enPassant(int colorNum, String[][] mat, int endRow, int endCol, char type) { // Movimento Especial - En
+																								// Passant
+		boolean pawnWhite = false; // Tem peao branco na posicao
+		boolean pawnBlack = false; // Tem peao preto na posicao
+		String rightSpot = mat[(endRow + 1)][endCol]; // Se tem peao do lado direito
+		String leftSpot = mat[(endRow - 1)][endCol]; // Se tem peao do lado direito
+		if ((rightSpot != " - ") || (rightSpot != null) || (leftSpot != " - ") || (leftSpot != null)) {
+			if ((rightSpot == "WP ") || (leftSpot == "WP ")) {
+				pawnWhite = true;
+			} else if ((rightSpot == "BP ") || (leftSpot == "BP ")) {
+				pawnBlack = true;
+			}
+
+		}
+
+		if (type == 'P') { // Se a peca jogada for peao
+			if (colorNum == 0) { // No final do turno do Branco, se ele sofreu En Passant
+				if ((endRow == 3) && (pawnBlack == true)) {
+					if ((rightSpot == "BP ")) {
+						mat[(endRow + 1)][endCol] = " - ";
+						mat[endRow][endCol] = "BP ";
+						System.out.println(
+								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+					} else if ((leftSpot == "BP ")) {
+						mat[(endRow - 1)][endCol] = " - ";
+						mat[endRow][endCol] = "BP ";
+						System.out.println(
+								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+					}
+				}
+			} else if (colorNum == 1) { // // No final do turno do Preto, se ele sofreu En Passant
+				if ((endRow == 4) && (pawnWhite == true)) {
+					if ((rightSpot == "WP ")) {
+						mat[(endRow + 1)][endCol] = " - ";
+						mat[endRow][endCol] = "WP ";
+						System.out.println(
+								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+					} else if ((leftSpot == "WP ")) {
+						mat[(endRow - 1)][endCol] = " - ";
+						mat[endRow][endCol] = "WP ";
+						System.out.println(
+								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+					}
+				}
+			}
+		}
+	}
 }

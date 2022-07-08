@@ -88,6 +88,9 @@ public class Piece {
 				return 0;
 			} else if ((difRow == 2) && (difCol == 0) && (startRow == 1)) {
 				return 0;
+			} else if (((difRow == 1) && (difCol == 0) && (endRow == 8))
+					|| ((difRow == 1) && (Math.abs(difCol) == 1) && (endSpot != null) && (endRow == 8))) {
+				return 4;
 			} else {
 				return 1;
 			}
@@ -99,6 +102,9 @@ public class Piece {
 				return 0;
 			} else if ((difRow == -2) && (difCol == 0) && (startRow == 6)) {
 				return 0;
+			} else if (((difRow == -2) && (difCol == 0) && (endRow == 1))
+					|| ((difRow == -1) && (Math.abs(difCol) == 1) && (endSpot != null) && (endRow == 1))) {
+				return 4;
 			} else {
 				return 1;
 			}
@@ -107,6 +113,26 @@ public class Piece {
 			System.out.println("Erro - Type");
 		}
 		return movLegal;
+	}
+	
+	public void promotionPiece(String promoSelect, int endRow, int endCol, int color, String[][] mat) {
+		if (color == 0 && promoSelect == "N") {
+			mat[endRow][endCol] = "WN ";
+		}else if (color == 1 && promoSelect == "N") {
+			mat[endRow][endCol] = "BN ";
+		}else if (color == 0 && promoSelect == "R") {
+			mat[endRow][endCol] = "WR ";
+		}else if (color == 1 && promoSelect == "R") {
+			mat[endRow][endCol] = "BR ";
+		}else if (color == 0 && promoSelect == "B") {
+			mat[endRow][endCol] = "WB ";
+		}else if (color == 1 && promoSelect == "B") {
+			mat[endRow][endCol] = "BB ";
+		}else if (color == 0 && promoSelect == "Q") {
+			mat[endRow][endCol] = "WQ ";
+		}else if (color == 1 && promoSelect == "Q") {
+			mat[endRow][endCol] = "BQ ";
+		}
 	}
 
 }

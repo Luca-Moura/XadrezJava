@@ -1,5 +1,8 @@
 package program;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 
 	public int x = 9; // numero de linhas da matriz
@@ -142,14 +145,13 @@ public class Board {
 		return mat;
 	}
 
-	public int showKing() { //Verifica se o Rei esta vivo. 0 Ambos Vivos, 1 White vivo, 2 Black vivo
-		int count = 0; //Contagem - 0 Erro, 1 Rei Branco Vivo, 2 Rei Preto Vivo, 3 Ambos Vivos
+	public int showKing() { // Verifica se o Rei esta vivo. 0 Ambos Vivos, 1 White vivo, 2 Black vivo
+		int count = 0; // Contagem - 0 Erro, 1 Rei Branco Vivo, 2 Rei Preto Vivo, 3 Ambos Vivos
 		for (int row = 0; row <= 8; row++) {
-			// printa matriz
 			for (int col = 0; col <= 8; col++) {
-				if (mat[row][col] == "BK ") { // printa quadrados vazios
+				if (mat[row][col] == "BK ") {
 					count += 2;
-				} else if (mat[row][col] == "WK "){
+				} else if (mat[row][col] == "WK ") {
 					count += 1;
 				}
 			}
@@ -157,7 +159,58 @@ public class Board {
 
 		return count;
 	}
-	
-	
+
+	public List<String> promo(int colorNum) { // Verifica peças vivas para promoção
+		List<String> promotionPossible = new ArrayList<>();
+		int countKnight = 0;
+		int countTower = 0;
+		int countBishop = 0;
+		int countQueen = 0;
+
+		if (colorNum == 0) { //// Cor dela em numero: 0-White e 1-Black
+			for (int row = 0; row <= 8; row++) {
+				for (int col = 0; col <= 8; col++) {
+					if (mat[row][col] == "WN ") {
+						countKnight += 1;
+					} else if (mat[row][col] == "WR ") {
+						countTower += 1;
+					} else if (mat[row][col] == "WB ") {
+						countBishop += 1;
+					} else if (mat[row][col] == "WQ ") {
+						countQueen += 1;
+					}
+				}
+			}
+		} else if (colorNum == 1) {
+			for (int row = 0; row <= 8; row++) {
+				for (int col = 0; col <= 8; col++) {
+					if (mat[row][col] == "BN ") {
+						countKnight += 1;
+					} else if (mat[row][col] == "BR ") {
+						countTower += 1;
+					} else if (mat[row][col] == "BB ") {
+						countBishop += 1;
+					} else if (mat[row][col] == "BQ ") {
+						countQueen += 1;
+					}
+				}
+			}
+		}
+
+		if (2 - countKnight > 0) {
+			promotionPossible.add("N");
+		}
+		if (2 - countTower > 0) {
+			promotionPossible.add("R");
+		}
+		if (2 - countBishop > 0) {
+			promotionPossible.add("B");
+		}
+		if (1 - countQueen > 0) {
+			promotionPossible.add("Q");
+		}
+
+		return promotionPossible;
+	}
 
 }
