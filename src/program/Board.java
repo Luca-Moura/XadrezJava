@@ -94,8 +94,8 @@ public class Board {
 		mat[0][1] = "WR ";
 		mat[0][2] = "WN ";
 		mat[0][3] = "WB ";
-		mat[0][4] = "WK ";
-		mat[0][5] = "WQ ";
+		mat[0][4] = "WQ ";
+		mat[0][5] = "WK ";
 		mat[0][6] = "WB ";
 		mat[0][7] = "WN ";
 		mat[0][8] = "WR ";
@@ -211,6 +211,30 @@ public class Board {
 		}
 
 		return promotionPossible;
+	}
+
+	public boolean check(int eR, int eC, char type, int colorNum, String[][] mat) {
+		boolean checked = false;
+		Movement mov = new Movement();
+
+		int sum = 0;
+		for (int row = 0; row <= 8; row++) {
+			for (int col = 0; col <= 8; col++) {
+				String[][] falseMat = mat;
+				int checkMov = mov.Mov(row, col, eR, eC, falseMat, colorNum);
+				if (checkMov == 0) {
+					sum += 1;
+				}
+			}
+		}
+
+		if (sum == 0) { //Ninguem come
+			checked = false;
+		} else {        //Pecas conseguem comer
+			checked = true;
+		}
+
+		return checked;
 	}
 
 }

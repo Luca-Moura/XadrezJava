@@ -78,7 +78,9 @@ public class Piece {
 		} else if (type == 'K') { // Movimento do Rei
 			if ((Math.abs(difRow) <= 1) && (Math.abs(difCol) <= 1)) {
 				return 0;
-			} else {
+			} else if ((Math.abs(difRow) <= 0) && (Math.abs(difCol) <= 2)) {
+				return 5;
+			}else {
 				return 1;
 			}
 		} else if (type == 'P' && color == 0) { // Movimento do Peao Branco

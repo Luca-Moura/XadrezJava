@@ -24,7 +24,7 @@ public class Game {
 		// Variaveis de posicao inicial e final
 
 		int endGame = 1; // Fim do jogo, 1: nao e final do jogo, 0: e final do jogo
-		
+
 		// Nomes dos jogadores para mensagem de vitoria
 		System.out.println("Jogador da parte Branca: ");
 		String playerWhite = sc.next();
@@ -42,7 +42,7 @@ public class Game {
 				while (turnW == 0) {
 					try {
 						// Bloco de jogada do Jogador Branco
-						System.out.println("Jogador Branco joga, escolha uma peca: ");
+						System.out.println("Jogador BRANCO joga, escolha uma peca: ");
 
 						System.out.println("Qual a linha que ela esta: ");
 						int sR = sc.nextInt();
@@ -75,7 +75,7 @@ public class Game {
 							}
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-						System.out.println("Posicao Invalida: Tente de novo.");
+						System.out.println("Posicao Branca Invalida: Tente de novo.");
 					} catch (InputMismatchException e) {
 						System.out.println("Algo foi digitado errado.");
 					}
@@ -88,7 +88,7 @@ public class Game {
 				while (turnB == 0) {
 					try {
 						// Bloco de jogada do Jogador Preto
-						System.out.println("Jogador Preto joga, escolha uma peca: ");
+						System.out.println("Jogador PRETO joga, escolha uma peca: ");
 
 						System.out.println("Qual a linha que ela esta: ");
 						int sR = sc.nextInt();
@@ -121,7 +121,7 @@ public class Game {
 							}
 						}
 					} catch (ArrayIndexOutOfBoundsException e) {
-						System.out.println("Posicao Invalida: Tente de novo.");
+						System.out.println("Posicao Preta Invalida: Tente de novo.");
 					} catch (InputMismatchException e) {
 						System.out.println("Algo foi digitado errado.");
 					}
@@ -138,7 +138,7 @@ public class Game {
 			turnB = 0;
 
 			int res = board.showKing();
-			if (res < 3){
+			if (res < 3) {
 				endGame = 0;
 			}
 		}

@@ -15,6 +15,15 @@ public class Movement {
 	 * @param colour
 	 * @return
 	 */
+
+	boolean towerWhiteRight = true;
+	boolean towerWhiteLeft = true;
+	boolean kingWhite = true;
+
+	boolean towerBlackRight = true;
+	boolean towerBlackLeft = true;
+	boolean kingBlack = true;
+
 	public int Mov(int startRow, int startCol, int endRow, int endCol, String[][] mat, int colour) {
 		Piece p = new Piece();
 
@@ -211,10 +220,27 @@ public class Movement {
 			}
 		}
 
-		// Promocao do peao
-		if (pieceMovLegal == 4 && isPromo == false)
+		// Checa se torre e rei estao se mexendo pela primeira vez pro castling
+		if ((startRow == 0 && startCol == 1)) {
+			towerWhiteLeft = false;
+		} else if ((startRow == 0 && startCol == 4)) {
+			kingWhite = false;
+		} else if ((startRow == 0 && startCol == 8)) {
+			towerWhiteRight = false;
+		} else if ((startRow == 7 && startCol == 1)) {
+			towerBlackLeft = false;
+		} else if ((startRow == 7 && startCol == 4)) {
+			kingBlack = false;
+		} else if ((startRow == 7 && startCol == 8)) {
+			towerBlackRight = false;
+		}
 
-		{
+		if (pieceMovLegal == 5) {
+			pieceMovLegal = castling(endRow, endCol, colorNum, type, mat);
+		}
+
+		// Promocao do peao
+		if (pieceMovLegal == 4 && isPromo == false) {
 			pieceMovLegal = 0; // Deixa fazer o movimento normal
 			isPromo = true; // Vai realizar promo
 		}
@@ -253,7 +279,7 @@ public class Movement {
 		}
 
 		// Movimento em si - Versão com promocao
-		if ((colorNum == colour) && (pieceMovLegal == 0) && (notPiece == true))
+		if ((colorNum == colour) && (pieceMovLegal == 0) && (isPromo == true))
 
 		{
 			// Peca movimentada
@@ -268,9 +294,9 @@ public class Movement {
 				System.out.println("Escolha a peca desejada para promocao: " + promo);
 				promoSelect = scanner.next();
 			} catch (ArrayIndexOutOfBoundsException e) {
-				System.out.println("Posicao Invalida: Tente de novo.");
+				System.out.println("Posicao Invalida: Tente de novo...");
 			} catch (InputMismatchException e) {
-				System.out.println("Algo foi digitado errado.");
+				System.out.println("Algo foi digitado errado...");
 			}
 			scanner.close();
 			if (promoSelect != "Vazio") {
@@ -334,8 +360,14 @@ public class Movement {
 																								// Passant
 		boolean pawnWhite = false; // Tem peao branco na posicao
 		boolean pawnBlack = false; // Tem peao preto na posicao
-		String rightSpot = mat[(endRow + 1)][endCol]; // Se tem peao do lado direito
-		String leftSpot = mat[(endRow - 1)][endCol]; // Se tem peao do lado direito
+		String rightSpot = null;
+		String leftSpot = mat[endRow][(endCol - 1)]; // Se tem peao do lado direito
+		if ((endCol + 1) > 8) {
+			rightSpot = mat[endRow][(endCol - 1)]; // Se tem peao do lado direito
+		}
+		if ((endCol + 1) <= 8) {
+			rightSpot = mat[endRow][(endCol + 1)]; // Se tem peao do lado direito
+		}
 		if ((rightSpot != " - ") || (rightSpot != null) || (leftSpot != " - ") || (leftSpot != null)) {
 			if ((rightSpot == "WP ") || (leftSpot == "WP ")) {
 				pawnWhite = true;
@@ -349,32 +381,92 @@ public class Movement {
 			if (colorNum == 0) { // No final do turno do Branco, se ele sofreu En Passant
 				if ((endRow == 3) && (pawnBlack == true)) {
 					if ((rightSpot == "BP ")) {
-						mat[(endRow + 1)][endCol] = " - ";
-						mat[endRow][endCol] = "BP ";
+						mat[endRow][endCol] = " - ";
+						mat[endRow][endCol+1] = " - ";
+						mat[endRow-1][endCol] = "BP ";
 						System.out.println(
-								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+								"En Passant aconteceu.");
 					} else if ((leftSpot == "BP ")) {
-						mat[(endRow - 1)][endCol] = " - ";
-						mat[endRow][endCol] = "BP ";
+						mat[endRow][endCol] = " - ";
+						mat[endRow][endCol-1] = " - ";
+						mat[endRow-1][endCol] = "BP ";
 						System.out.println(
-								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+								"En Passant aconteceu.");
 					}
 				}
 			} else if (colorNum == 1) { // // No final do turno do Preto, se ele sofreu En Passant
 				if ((endRow == 4) && (pawnWhite == true)) {
 					if ((rightSpot == "WP ")) {
-						mat[(endRow + 1)][endCol] = " - ";
-						mat[endRow][endCol] = "WP ";
+						mat[endRow][endCol] = " - ";
+						mat[endRow][endCol+1] = " - ";
+						mat[endRow+1][endCol] = "WP ";
 						System.out.println(
-								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+								"En Passant aconteceu.");
 					} else if ((leftSpot == "WP ")) {
-						mat[(endRow - 1)][endCol] = " - ";
-						mat[endRow][endCol] = "WP ";
+						mat[endRow][endCol] = " - ";
+						mat[endRow][endCol-1] = " - ";
+						mat[endRow+1][endCol] = "WP ";
 						System.out.println(
-								"En Passant aconteceu, a peça na posição " + mat[endRow][endCol] + " foi morta.");
+								"En Passant aconteceu.");
 					}
 				}
 			}
 		}
 	}
+
+	public int castling(int endRow, int endCol, int colorNum, char type, String[][] mat) {
+		Board board = new Board();
+		int pieceMovLegal = 5;
+		if (endRow == 0 && endCol == 2) { // Castling White Long
+			boolean testCheck1 = board.check(endRow, endCol, type, colorNum, mat);
+			int endCol2 = endCol - 1;
+			boolean testCheck2 = board.check(endRow, endCol2, type, colorNum, mat);
+
+			if (towerWhiteLeft == true && kingWhite == true && testCheck1 == false && testCheck2 == false) {
+				mat[0][3] = "WK ";
+				mat[0][4] = "WR ";
+			} else {
+				pieceMovLegal = 1;
+			}
+
+		} else if (endRow == 0 && endCol == 6) { // Castling White Short
+			boolean testCheck1 = board.check(endRow, endCol, type, colorNum, mat);
+			int endCol2 = endCol + 1;
+			boolean testCheck2 = board.check(endRow, endCol2, type, colorNum, mat);
+
+			if (towerWhiteRight == true && kingWhite == true && testCheck1 == false && testCheck2 == false) {
+				mat[0][7] = "WK ";
+				mat[0][6] = "WR ";
+			} else {
+				pieceMovLegal = 1;
+			}
+
+		} else if (endRow == 7 && endCol == 2) { // Castling Black Short
+			boolean testCheck1 = board.check(endRow, endCol, type, colorNum, mat);
+			int endCol2 = endCol + 1;
+			boolean testCheck2 = board.check(endRow, endCol2, type, colorNum, mat);
+
+			if (towerBlackLeft == true && kingWhite == true && testCheck1 == false && testCheck2 == false) {
+				mat[7][7] = "BK ";
+				mat[7][6] = "BR ";
+			} else {
+				pieceMovLegal = 1;
+			}
+
+		} else if (endRow == 7 && endCol == 6) { // Castling Black Long
+			boolean testCheck1 = board.check(endRow, endCol, type, colorNum, mat);
+			int endCol2 = endCol - 1;
+			boolean testCheck2 = board.check(endRow, endCol2, type, colorNum, mat);
+
+			if (towerBlackLeft == true && kingWhite == true && testCheck1 == false && testCheck2 == false) {
+				mat[7][3] = "BK ";
+				mat[7][4] = "BR ";
+			} else {
+				pieceMovLegal = 1;
+			}
+		}
+
+		return pieceMovLegal;
+	}
+
 }
