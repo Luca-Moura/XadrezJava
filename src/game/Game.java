@@ -27,12 +27,15 @@ public class Game {
 
 		// Nomes dos jogadores para mensagem de vitoria
 		System.out.println("Jogador da parte Branca: ");
+		Thread.sleep(500);
 		String playerWhite = sc.next();
 		System.out.println("Jogador da parte Preta: ");
+		Thread.sleep(500);
 		String playerBlack = sc.next();
 
 		// Informa��es do jogo
 		System.out.println("Coluna sao as letras, numero sao as linhas.");
+		Thread.sleep(500);
 
 		while (endGame == 1) {
 			whiteMov = 1;
@@ -42,22 +45,28 @@ public class Game {
 				while (turnW == 0) {
 					try {
 						// Bloco de jogada do Jogador Branco
+						Thread.sleep(500);
 						System.out.println("Jogador BRANCO joga, escolha uma peca: ");
+						Thread.sleep(500);
 
 						System.out.println("Qual a linha que ela esta: ");
+						Thread.sleep(500);
 						int sR = sc.nextInt();
 						sR = mov.FixMovRow(sR); // Linha ficticia(1~8) para resposta em linha da matriz(0~7)
 
 						System.out.println("Qual a coluna que ela esta: ");
+						Thread.sleep(500);
 						String sC = sc.next();
 						int sCNum = mov.FixMovCol(sC); // Coluna ficticia(a~h) para resposta em Coluna da
 														// matriz(1~8)
 
 						System.out.println("Qual a linha que ela anda: ");
+						Thread.sleep(500);
 						int eR = sc.nextInt();
 						eR = mov.FixMovRow(eR); // Linha ficticia(1~8) para resposta em linha da matriz(0~7)
 
 						System.out.println("Qual a coluna que ela anda: ");
+						Thread.sleep(500);
 						String eC = sc.next();
 						int eCNum = mov.FixMovCol(eC);// Coluna ficticia(a~h) para resposta em Coluna da matriz(1~8)
 
@@ -88,22 +97,28 @@ public class Game {
 				while (turnB == 0) {
 					try {
 						// Bloco de jogada do Jogador Preto
+						Thread.sleep(500);
 						System.out.println("Jogador PRETO joga, escolha uma peca: ");
+						Thread.sleep(500);
 
 						System.out.println("Qual a linha que ela esta: ");
+						Thread.sleep(500);
 						int sR = sc.nextInt();
 						sR = mov.FixMovRow(sR); // Linha ficticia(1~8) para resposta em linha da matriz(0~7)
 
 						System.out.println("Qual a coluna que ela esta: ");
+						Thread.sleep(500);
 						String sC = sc.next();
 						int sCNum = mov.FixMovCol(sC); // Coluna ficticia(a~h) para resposta em Coluna da
 														// matriz(1~8)
 
 						System.out.println("Qual a linha que ela anda: ");
+						Thread.sleep(500);
 						int eR = sc.nextInt();
 						eR = mov.FixMovRow(eR); // Linha ficticia(1~8) para resposta em linha da matriz(0~7)
 
 						System.out.println("Qual a coluna que ela anda: ");
+						Thread.sleep(500);
 						String eC = sc.next();
 						int eCNum = mov.FixMovCol(eC);// Coluna ficticia(a~h) para resposta em Coluna da matriz(1~8)
 
@@ -127,7 +142,7 @@ public class Game {
 					}
 				}
 			} while (blackMov == 1);
-
+			Thread.sleep(500);
 			System.out.println();
 			System.out.println("-----------------------------------------");
 			System.out.println("Proximo Turno");

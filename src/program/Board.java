@@ -92,20 +92,20 @@ public class Board {
 		mat[6][7] = "BP ";
 		mat[6][8] = "BP ";
 		mat[0][1] = "WR ";
-		mat[0][2] = "WN ";
-		mat[0][3] = "WB ";
-		mat[0][4] = "WQ ";
+		mat[0][2] = " - ";
+		mat[0][3] = " - ";
+		mat[0][4] = " - ";
 		mat[0][5] = "WK ";
-		mat[0][6] = "WB ";
-		mat[0][7] = "WN ";
+		mat[0][6] = " - ";
+		mat[0][7] = " - ";
 		mat[0][8] = "WR ";
 		mat[7][1] = "BR ";
-		mat[7][2] = "BN ";
-		mat[7][3] = "BB ";
-		mat[7][4] = "BQ ";
+		mat[7][2] = " - ";
+		mat[7][3] = " - ";
+		mat[7][4] = " - ";
 		mat[7][5] = "BK ";
-		mat[7][6] = "BB ";
-		mat[7][7] = "BN ";
+		mat[7][6] = " - ";
+		mat[7][7] = " - ";
 		mat[7][8] = "BR ";
 
 		for (int row = 0; row <= 8; row++) {
